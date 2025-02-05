@@ -1,3 +1,5 @@
+from math import trunc
+from operator import matmul
 from typing import Any, Callable, TypeVar
 
 T = TypeVar('T', bound = Any)
@@ -214,6 +216,63 @@ class LazyData:
     def __cmp__(self, other):
         self.getValue()
         return self._value.__cmp__(other)
+    def __reversed__(self):
+        self.getValue()
+        return reversed(self._value)
+    def __trunc__(self):
+        self.getValue()
+        return trunc(self._value)
+    def __index__(self):
+        self.getValue()
+        return self._value.__index__()
+    def __lshift__(self, other):
+        self.getValue()
+        return self._value << other
+    def __rshift__(self, other):
+        self.getValue()
+        return self._value >> other
+    def __rlshift__(self, other):
+        self.getValue()
+        return other << self._value
+    def __rrshift__(self, other):
+        self.getValue()
+        return other >> self._value
+    def __ilshift__(self, other):
+        self.getValue()
+        self._value <<= other
+    def __irshift__(self, other):
+        self.getValue()
+        self._value >>= other
+    def __xor__(self, other):
+        self.getValue()
+        return self._value ^ other
+    def __ixor__(self, other):
+        self.getValue()
+        self._value ^= other
+    def __rxor__(self, other):
+        self.getValue()
+        return other ^ self._value
+    def __invert__(self):
+        self.getValue()
+        return ~self._value
+    def __divmod__(self, other):
+        self.getValue()
+        return divmod(self._value, other)
+    def __iand__(self, other):
+        self.getValue()
+        self._value &= other
+    def __ior__(self, other):
+        self.getValue()
+        self._value |= other
+    def __matmul__(self, other):
+        self.getValue()
+        return matmul(self._value, other)
+    def __rmatmul__(self, other):
+        self.getValue()
+        return matmul(other, self._value)
+    def __imatmul__(self, other):
+        self.getValue()
+        self._value = matmul(self._value, other)
 
 def Lazy(f: F) -> F:
     def f_lazy(*args, **kwargs):
