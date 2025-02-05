@@ -1,9 +1,9 @@
-from typing import TypeVar, Callable, Any
+from typing import TypeVar, Callable
 
-T = TypeVar('T', bound = Callable[..., Any])
+F = TypeVar('F', bound = Callable)
 
-def Repeat(times: int) -> Callable[[T], T]:
-    def repeater(f: T) -> T:
+def Repeat(times: int) -> Callable[[F], F]:
+    def repeater(f: F) -> F:
         def f_repeated(*args, **kwargs):
             ans = None
             for i in range(times):

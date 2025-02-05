@@ -1,11 +1,11 @@
-from typing import TypeVar, Callable, Any
+from typing import TypeVar, Callable
 
-C = TypeVar('C', bound = Any)
-T = TypeVar('T', bound = Callable[[C], C])
+T = TypeVar('T')
+F = TypeVar('F', bound = Callable[[T], T])
 
-def Chain(times: int) -> Callable[[T], T]:
-    def chainer(f: T) -> T:
-        def f_chain(arg: C) -> C:
+def Chain(times: int) -> Callable[[F], F]:
+    def chainer(f: F) -> F:
+        def f_chain(arg: T) -> T:
             ans = arg
             for i in range(times):
                 ans = f(ans)

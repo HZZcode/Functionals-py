@@ -1,8 +1,8 @@
 from math import trunc
 from operator import matmul
-from typing import Any, Callable, TypeVar
+from typing import Callable, TypeVar
 
-T = TypeVar('T', bound = Any)
+T = TypeVar('T')
 F0: TypeVar = Callable[[], T]
 F: TypeVar = Callable[[...], T]
 

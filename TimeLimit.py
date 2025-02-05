@@ -1,6 +1,6 @@
 import threading
 from time import sleep
-from typing import Callable, Any, TypeVar
+from typing import Callable, TypeVar
 
 def singleton(cls):
     _instance = {}
@@ -17,10 +17,10 @@ class TimeReachLimitType:
 
 TimeReachLimit = TimeReachLimitType()
 
-T = TypeVar('T', bound = Callable[..., Any])
+F = TypeVar('F', bound = Callable)
 
-def TimeLimit(seconds: float) -> Callable[[T], T]:
-    def limiter(f: T) -> T:
+def TimeLimit(seconds: float) -> Callable[[F], F]:
+    def limiter(f: F) -> F:
         def f_limited(*args, **kwargs):
             class CalcThread(threading.Thread):
                 def __init__(self):
