@@ -1,6 +1,7 @@
 from typing import TypeVar, Callable
 
 F = TypeVar('F', bound = Callable)
+
 def Currying(f: F):
     def f_curry(*args, **kwargs):
         if not args and not kwargs:
