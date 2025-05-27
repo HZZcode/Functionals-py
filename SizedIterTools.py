@@ -26,7 +26,9 @@ def sized_iter(*, required_kwargs: dict[str, Any] | None = None,
             return self.inner_iter
 
         def __len__(self) -> int:
-            return calc_size(self.iterables, **self.kwargs)
+            if self.size is None:
+                self.size = calc_size(self.iterables, **self.kwargs)
+            return self.size
 
     return sized
 
