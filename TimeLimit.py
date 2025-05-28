@@ -1,4 +1,5 @@
 import threading
+from functools import wraps
 from time import sleep
 from typing import Callable, TypeVar
 
@@ -21,6 +22,7 @@ F = TypeVar('F', bound = Callable)
 
 def TimeLimit(seconds: float) -> Callable[[F], F]:
     def limiter(f: F) -> F:
+        @wraps(f)
         def f_limited(*args, **kwargs):
             class CalcThread(threading.Thread):
                 def __init__(self):

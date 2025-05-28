@@ -1,3 +1,4 @@
+from functools import wraps
 from math import trunc
 from operator import matmul
 from typing import Callable, TypeVar
@@ -275,6 +276,7 @@ class LazyData:
         self._value = matmul(self._value, other)
 
 def Lazy(f: F) -> F:
+    @wraps(f)
     def f_lazy(*args, **kwargs):
         def f0():
             return f(*args, **kwargs)

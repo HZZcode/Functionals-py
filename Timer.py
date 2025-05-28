@@ -1,9 +1,11 @@
 import inspect
 import time
+from functools import wraps
 
 
 def Timer(time_processor = None, avoid_recursive = True, show_args = False):
     def timer(f):
+        @wraps(f)
         def f_timed(*args, **kwargs):
             start = time.time()
             result = f(*args, **kwargs)

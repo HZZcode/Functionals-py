@@ -1,8 +1,10 @@
+from functools import wraps
 from typing import TypeVar, Callable
 
 F = TypeVar('F', bound = Callable)
 
 def Currying(f: F):
+    @wraps(f)
     def f_curry(*args, **kwargs):
         if not args and not kwargs:
             return f_curry
