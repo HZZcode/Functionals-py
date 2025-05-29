@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Generic, TypeVar, Callable, TypeAlias
+from typing import Generic, TypeVar, Callable, TypeAlias, Self
 
 T = TypeVar('T')
 F: TypeAlias = Callable[[T], bool]
@@ -12,17 +12,17 @@ class Predicate(Generic[T]):
     def __call__(self, t: T) -> bool:
         return self.predicate(t)
 
-    def __and__(self, other: F) -> 'Predicate[T]':
+    def __and__(self, other: F) -> Self:
         return Predicate(lambda t: (self(t) and other(t)))
 
-    def __or__(self, other: F) -> 'Predicate[T]':
+    def __or__(self, other: F) -> Self:
         return Predicate(lambda t: (self(t) or other(t)))
 
-    def __rand__(self, other: F) -> 'Predicate[T]':
+    def __rand__(self, other: F) -> Self:
         return Predicate(lambda t: (self(t) and other(t)))
 
-    def __ror__(self, other: F) -> 'Predicate[T]':
+    def __ror__(self, other: F) -> Self:
         return Predicate(lambda t: (self(t) or other(t)))
 
-    def __invert__(self) -> 'Predicate[T]':
+    def __invert__(self) -> Self:
         return Predicate(lambda t: not self(t))

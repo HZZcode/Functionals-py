@@ -9,27 +9,28 @@ F = TypeVar('F', bound=Callable)
 @dataclass
 class CallData:
     count: int
-    previous_time: float
 
 
-call_counts: dict[F, CallData] = {}
+call_counts: dict[str, CallData] = {}
 
 
 def DebugArgs(interval: int = 1):
     def debugger(f: F) -> F:
         @wraps(f)
         def f_debugged(*args: Any, **kwargs: dict[str, Any]):
-            if f not in call_counts:
-                call_counts[f] = CallData(0, time.time())
-            count: int = call_counts[f].count + 1
+            name: str = f.__name__
+            if name not in call_counts:
+                call_counts[name] = CallData(0)
+            count: int = call_counts[name].count + 1
+            start: float = time.time()
+            result = f(*args, **kwargs)
+            end: float = time.time()
             if count % interval == 0:
-                now: float = time.time()
-                average = (now - call_counts[f].previous_time) / interval if f in call_counts else 0
-                print(f'No. {count} call of func {f.__name__}, average cost {average:.3f}s per call'
+                cost = end - start
+                print(f'No.{count} call of func {name}, cost {cost:.3f}s'
                       + f', with {args=} and {kwargs=}')
-                call_counts[f].previous_time = now
-            call_counts[f].count = count
-            return f(*args, **kwargs)
+            call_counts[name].count = count
+            return result
 
         return f_debugged
 
