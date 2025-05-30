@@ -9,3 +9,4 @@ def auto_sum(iterable: Iterable[T]) -> T:
     if first is not None:
         return sum(iterable, type(first)())
     return sum(iterable)
+# BUG: auto_sum(Iterator) ignores the first element

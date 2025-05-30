@@ -3,15 +3,10 @@ from functools import wraps
 from time import sleep
 from typing import Callable, TypeVar
 
-def singleton(cls):
-    _instance = {}
-    def inner():
-        if cls not in _instance:
-            _instance[cls] = cls()
-        return _instance[cls]
-    return inner
+from functionals.Singleton import Singleton
 
-@singleton
+
+@Singleton
 class TimeReachLimitType:
     def __str__(self):
         return "Time Reached Limit"

@@ -6,7 +6,7 @@ from typing import TypeVar, Callable, Iterable
 F = TypeVar('F', bound=Callable)
 
 def AutoRetry(except_type: type = Exception, max_retry: int | None = None,
-              info_interval: int = 1, retry_delay: int = 0):
+              info_interval: int = 1, retry_delay: float = 0):
     def retry(f: F) -> F:
         it: Iterable
         if max_retry is None:
