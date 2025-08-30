@@ -3,7 +3,7 @@ import time
 from functools import wraps
 
 
-def Timer(time_processor = None, avoid_recursive = True, show_args = False):
+def Timer(time_processor=None, avoid_recursive=True, show_args=False):
     def timer(f):
         @wraps(f)
         def f_timed(*args, **kwargs):
@@ -21,5 +21,7 @@ def Timer(time_processor = None, avoid_recursive = True, show_args = False):
                 else:
                     time_processor(cost)
             return result
+
         return f_timed
+
     return timer

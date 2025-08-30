@@ -1,28 +1,25 @@
 from dataclasses import dataclass
-from typing import Generic, TypeVar, Callable, TypeAlias, Self
-
-T = TypeVar('T')
-F: TypeAlias = Callable[[T], bool]
+from typing import Callable, Self
 
 
 @dataclass
-class Predicate(Generic[T]):
-    predicate: F
+class Predicate[T]:
+    predicate: Callable[[T], bool]
 
     def __call__(self, t: T) -> bool:
         return self.predicate(t)
 
-    def __and__(self, other: F) -> Self:
-        return Predicate(lambda t: (self(t) and other(t)))
+    def __and__(self, other: Callable[[T], bool]):
+        return Predicate[T](lambda t: (self(t) and other(t)))
 
-    def __or__(self, other: F) -> Self:
-        return Predicate(lambda t: (self(t) or other(t)))
+    def __or__(self, other: Callable[[T], bool]):
+        return Predicate[T](lambda t: (self(t) or other(t)))
 
-    def __rand__(self, other: F) -> Self:
-        return Predicate(lambda t: (self(t) and other(t)))
+    def __rand__(self, other: Callable[[T], bool]):
+        return Predicate[T](lambda t: (self(t) and other(t)))
 
-    def __ror__(self, other: F) -> Self:
-        return Predicate(lambda t: (self(t) or other(t)))
+    def __ror__(self, other: Callable[[T], bool]):
+        return Predicate[T](lambda t: (self(t) or other(t)))
 
-    def __invert__(self) -> Self:
-        return Predicate(lambda t: not self(t))
+    def __invert__(self):
+        return Predicate[T](lambda t: not self(t))

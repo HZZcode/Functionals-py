@@ -1,9 +1,7 @@
 import time
 from dataclasses import dataclass
 from functools import wraps
-from typing import TypeVar, Callable, Any
-
-F = TypeVar('F', bound=Callable)
+from typing import Callable, Any
 
 
 @dataclass
@@ -14,7 +12,7 @@ class CallData:
 call_counts: dict[str, CallData] = {}
 
 
-def DebugArgs(interval: int = 1):
+def DebugArgs[F: Callable](interval: int = 1):
     def debugger(f: F) -> F:
         @wraps(f)
         def f_debugged(*args: Any, **kwargs: dict[str, Any]):

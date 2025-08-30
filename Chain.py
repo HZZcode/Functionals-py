@@ -1,10 +1,8 @@
 from functools import wraps
-from typing import TypeVar, Callable
+from typing import Callable
 
-T = TypeVar('T')
-F = TypeVar('F', bound = Callable[[T], T])
 
-def Chain(times: int) -> Callable[[F], F]:
+def Chain[T, F: Callable](times: int) -> Callable[[F], F]:
     def chainer(f: F) -> F:
         @wraps(f)
         def f_chain(arg: T) -> T:
@@ -12,5 +10,7 @@ def Chain(times: int) -> Callable[[F], F]:
             for i in range(times):
                 ans = f(ans)
             return ans
+
         return f_chain
+
     return chainer

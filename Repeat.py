@@ -1,9 +1,8 @@
 from functools import wraps
-from typing import TypeVar, Callable
+from typing import TypeVar, Callable, Iterable, Any
 
-F = TypeVar('F', bound = Callable)
 
-def Repeat(times: int) -> Callable[[F], F]:
+def Repeat[F: Callable](times: int) -> Callable[[F], F]:
     def repeater(f: F) -> F:
         @wraps(f)
         def f_repeated(*args, **kwargs):
@@ -11,5 +10,7 @@ def Repeat(times: int) -> Callable[[F], F]:
             for i in range(times):
                 ans = f(*args, **kwargs)
             return ans
+
         return f_repeated
+
     return repeater
