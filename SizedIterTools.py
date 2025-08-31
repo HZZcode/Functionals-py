@@ -1,7 +1,11 @@
 from functools import reduce
 from itertools import product, zip_longest, chain
 from operator import mul
-from typing import Sized, Iterable, Iterator, Callable, Any
+from typing import Sized, Iterable, Iterator, Callable, Any, Protocol
+
+
+class SizedIterable(Iterable, Sized, Protocol):
+    pass
 
 
 def sized_iter(*, required_kwargs: dict[str, Any] | None = None,
@@ -10,13 +14,13 @@ def sized_iter(*, required_kwargs: dict[str, Any] | None = None,
     if required_kwargs is None:
         required_kwargs = {}
 
-    class sized(Sized, Iterable):
-        iterables: tuple[Iterable, ...]
+    class sized(SizedIterable):
+        iterables: tuple[SizedIterable, ...]
         kwargs: dict[str, Any]
         inner_iter: Iterator
         size: int | None
 
-        def __init__(self, *iterables: Iterable, **kwargs: dict[str, Any]):
+        def __init__(self, *iterables: SizedIterable, **kwargs: dict[str, Any]):
             self.iterables = iterables
             self.kwargs = {**required_kwargs, **kwargs}
             self.inner_iter = iter_getter(*iterables, **kwargs)
@@ -36,17 +40,17 @@ def sized_iter(*, required_kwargs: dict[str, Any] | None = None,
 sized_product = sized_iter(
     required_kwargs={'repeat': 1},
     iter_getter=product,
-    calc_size=lambda iterables, repeat: reduce(mul, (len(list(iterable)) for iterable in iterables), 1) ** repeat
+    calc_size=lambda iterables, repeat: reduce(mul, (len(iterable) for iterable in iterables), 1) ** repeat
 )
 sized_zip = sized_iter(
     iter_getter=zip,
-    calc_size=lambda iterables: min(len(list(iterable)) for iterable in iterables)
+    calc_size=lambda iterables: min(len(iterable) for iterable in iterables)
 )
 sized_zip_longest = sized_iter(
     iter_getter=zip_longest,
-    calc_size=lambda iterables: max(len(list(iterable)) for iterable in iterables)
+    calc_size=lambda iterables: max(len(iterable) for iterable in iterables)
 )
 sized_chain = sized_iter(
     iter_getter=chain,
-    calc_size=lambda iterables: sum(len(list(iterable)) for iterable in iterables)
+    calc_size=lambda iterables: sum(len(iterable) for iterable in iterables)
 )
